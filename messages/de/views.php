@@ -44,6 +44,8 @@ return [
     'Users' => 'Benutzer*innen',
     'Video Sessions' => 'Videokonferenzen',
     'Visibility' => 'Sichtbarkeit',
+    'Waiting Room' => 'Warteraum',
     'Waiting for the session to start...' => 'Warte auf den Start der Sitzung...',
+    'Waiting room enabled' => 'Warteraum aktiviert',
     'Your Name' => 'Dein Name',
 ];

@@ -68,17 +68,18 @@ $this->pageTitle = Yii::t('SessionsModule.views', 'Sessions');
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th style="width: 40px;"></th>
+                            <th></th>
                             <th><?= Yii::t('SessionsModule.views', 'Session') ?></th>
                             <?php if (!empty($isGlobalView) && $scope !== 'global'): ?>
-                                <th style="width: 150px;"><?= Yii::t('SessionsModule.views', 'Location') ?></th>
+                                <th><?= Yii::t('SessionsModule.views', 'Location') ?></th>
                             <?php endif; ?>
-                            <th style="width: 100px;"><?= Yii::t('SessionsModule.views', 'Backend') ?></th>
-                            <th style="width: 130px;"><?= Yii::t('SessionsModule.views', 'Created') ?></th>
-                            <th style="width: 40px; text-align: center;" title="<?= Yii::t('SessionsModule.views', 'Visibility') ?>"><i class="fa fa-eye"></i></th>
-                            <th style="width: 40px; text-align: center;" title="<?= Yii::t('SessionsModule.views', 'Recording') ?>"><i class="fa fa-circle"></i></th>
-                            <th style="width: 100px;"><?= Yii::t('SessionsModule.views', 'Status') ?></th>
-                            <th style="width: 150px;"></th>
+                            <th><?= Yii::t('SessionsModule.views', 'Backend') ?></th>
+                            <th><?= Yii::t('SessionsModule.views', 'Created') ?></th>
+                            <th style="text-align: center;" title="<?= Yii::t('SessionsModule.views', 'Visibility') ?>"><i class="fa fa-eye"></i></th>
+                            <th style="text-align: center;" title="<?= Yii::t('SessionsModule.views', 'Waiting Room') ?>"><i class="fa fa-clock-o"></i></th>
+                            <th style="text-align: center;" title="<?= Yii::t('SessionsModule.views', 'Recording') ?>"><i class="fa fa-circle"></i></th>
+                            <th><?= Yii::t('SessionsModule.views', 'Status') ?></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -90,11 +91,11 @@ $this->pageTitle = Yii::t('SessionsModule.views', 'Sessions');
                             $sessionContainer = $model->content->container ?? null;
                         ?>
                             <tr class="<?= $isHighlighted ? 'info' : '' ?>" data-session-id="<?= $model->id ?>">
-                                <td style="padding: 0 !important; vertical-align: middle; width: 36px;">
+                                <td style="padding: 0 !important; vertical-align: middle;">
                                     <?php if ($model->outputImage): ?>
                                         <img src="<?= $model->outputImage->getUrl() ?>"
                                              alt="" class="img-rounded"
-                                             style="width: 36px; height: 36px; object-fit: cover;">
+                                             style="width: 36px; height: 36px; object-fit: cover; display: block; margin: -1px 0;">
                                     <?php else: ?>
                                         <span class="fa-stack" style="font-size: 18px;">
                                             <i class="fa fa-square fa-stack-2x text-muted"></i>
@@ -151,6 +152,13 @@ $this->pageTitle = Yii::t('SessionsModule.views', 'Sessions');
                                            ? Yii::t('SessionsModule.views', 'Public')
                                            : Yii::t('SessionsModule.views', 'Private') ?>"
                                        style="color: <?= $isPublic ? '#5cb85c' : '#999' ?>;"></i>
+                                </td>
+                                <td style="text-align: center;">
+                                    <?php if ($model->has_waitingroom): ?>
+                                        <i class="fa fa-check" title="<?= Yii::t('SessionsModule.views', 'Waiting room enabled') ?>" style="color: #5cb85c;"></i>
+                                    <?php else: ?>
+                                        <span class="text-muted">-</span>
+                                    <?php endif; ?>
                                 </td>
                                 <td style="text-align: center;">
                                     <?php if ($model->allow_recording): ?>
