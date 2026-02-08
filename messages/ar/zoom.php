@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'Account ID' => '',
+    'Allow host to create breakout rooms during meeting' => '',
+    'Alternative hosts' => '',
+    'Auto recording' => '',
+    'Automatically start recording when meeting begins' => '',
+    'Client ID' => '',
+    'Client Secret' => '',
+    'Cloud recording' => '',
+    'Comma-separated email addresses of alternative hosts' => '',
+    'Disabled' => '',
+    'Enable breakout rooms' => '',
+    'Enterprise video conferencing with cloud recordings, waiting rooms, and advanced features. Requires Zoom account.' => '',
+    'Host starts with video on' => '',
+    'Local recording' => '',
+    'OAuth Client ID from your Zoom Server-to-Server OAuth app.' => '',
+    'OAuth Client Secret from your Zoom Server-to-Server OAuth app.' => '',
+    'Optional: Zoom User ID or email for creating meetings. Leave empty to use "me" (the app owner).' => '',
+    'Participants join with video enabled by default' => '',
+    'Participants start with video on' => '',
+    'Start meeting with host video enabled' => '',
+    'User ID' => '',
+    'Your Zoom Account ID. Found in the Zoom App Marketplace under your Server-to-Server OAuth app.' => '',
+];

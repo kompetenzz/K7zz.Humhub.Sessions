@@ -1,0 +1,14 @@
+{
+    "name": "humhub/sessions-bbb-plugin",
+    "description": "BigBlueButton backend plugin for Sessions module",
+    "type": "library",
+    "require": {
+        "php": ">=8.0",
+        "littleredbutton/bigbluebutton-api-php": "^6.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "humhub\\modules\\sessions\\plugins\\bbb\\": ""
+        }
+    }
+}

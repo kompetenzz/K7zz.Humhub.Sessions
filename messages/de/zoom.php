@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'Account ID' => 'Account-ID',
+    'Allow host to create breakout rooms during meeting' => 'Erlaubt dem Host, während der Konferenz Breakout-Räume zu erstellen',
+    'Alternative hosts' => 'Alternative Hosts',
+    'Auto recording' => 'Automatische Aufnahme',
+    'Automatically start recording when meeting begins' => 'Aufnahme automatisch starten, wenn die Konferenz beginnt',
+    'Client ID' => 'Client-ID',
+    'Client Secret' => 'Client Secret',
+    'Cloud recording' => 'Cloud-Aufnahme',
+    'Comma-separated email addresses of alternative hosts' => 'Kommagetrennte E-Mail-Adressen alternativer Hosts',
+    'Disabled' => 'Deaktiviert',
+    'Enable breakout rooms' => 'Breakout-Räume aktivieren',
+    'Enterprise video conferencing with cloud recordings, waiting rooms, and advanced features. Requires Zoom account.' => 'Enterprise-Videokonferenz mit Cloud-Aufnahmen, Warteräumen und erweiterten Funktionen. Erfordert ein Zoom-Konto.',
+    'Host starts with video on' => 'Host startet mit eingeschaltetem Video',
+    'Local recording' => 'Lokale Aufnahme',
+    'OAuth Client ID from your Zoom Server-to-Server OAuth app.' => 'OAuth Client-ID deiner Zoom Server-to-Server OAuth-App.',
+    'OAuth Client Secret from your Zoom Server-to-Server OAuth app.' => 'OAuth Client Secret deiner Zoom Server-to-Server OAuth-App.',
+    'Optional: Zoom User ID or email for creating meetings. Leave empty to use "me" (the app owner).' => 'Optional: Zoom User-ID oder E-Mail zum Erstellen von Konferenzen. Leer lassen, um "me" (den App-Inhaber) zu verwenden.',
+    'Participants join with video enabled by default' => 'Teilnehmer*innen treten standardmäßig mit eingeschaltetem Video bei',
+    'Participants start with video on' => 'Teilnehmer*innen starten mit eingeschaltetem Video',
+    'Start meeting with host video enabled' => 'Konferenz mit eingeschaltetem Host-Video starten',
+    'User ID' => 'User-ID',
+    'Your Zoom Account ID. Found in the Zoom App Marketplace under your Server-to-Server OAuth app.' => 'Deine Zoom Account-ID. Zu finden im Zoom App Marketplace unter deiner Server-to-Server OAuth-App.',
+];

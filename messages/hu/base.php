@@ -1,0 +1,28 @@
+<?php
+
+return [
+    ' Participants will enter directly.' => '',
+    ' Participants will wait until a moderator accepts them.' => '',
+    'A video session' => '',
+    'Adds video conferencing sessions to this container.' => '',
+    'Adds video conferencing sessions to this space.' => '',
+    'Adds video conferencing sessions to your profile.' => '',
+    'Failed to delete session.' => '',
+    'Failed to get join URL.' => '',
+    'Failed to start session.' => '',
+    'Failed to update recording.' => '',
+    'Guest' => '',
+    'Invalid or expired join link.' => '',
+    'Public join is not enabled for this session.' => '',
+    'Public join link: <a href="{link}">{link}</a>' => '',
+    'Recording updated.' => '',
+    'Session created.' => '',
+    'Session deleted.' => '',
+    'Session not found.' => '',
+    'Session saved.' => '',
+    'This session is not running.' => '',
+    'Video conferencing session' => '',
+    'You are not allowed to join this session.' => '',
+    'You are not allowed to start this session.' => '',
+    'You are the moderator of this session. You have additional permissions and responsibilities.' => '',
+];

@@ -1,0 +1,28 @@
+<?php
+
+return [
+    ' Participants will enter directly.' => ' Teilnehmer*innen betreten den Raum direkt.',
+    ' Participants will wait until a moderator accepts them.' => ' Teilnehmer*innen warten, bis ein*e Moderator*in sie zulässt.',
+    'A video session' => 'Eine Videokonferenz',
+    'Adds video conferencing sessions to this container.' => 'Fügt Videokonferenzen zu diesem Bereich hinzu.',
+    'Adds video conferencing sessions to this space.' => 'Fügt Videokonferenzen zu diesem Space hinzu.',
+    'Adds video conferencing sessions to your profile.' => 'Fügt Videokonferenzen zu deinem Profil hinzu.',
+    'Failed to delete session.' => 'Die Videokonferenz konnte nicht gelöscht werden.',
+    'Failed to get join URL.' => 'Der Beitritts-Link konnte nicht erzeugt werden.',
+    'Failed to start session.' => 'Die Videokonferenz konnte nicht gestartet werden.',
+    'Failed to update recording.' => 'Die Aufnahme konnte nicht aktualisiert werden.',
+    'Guest' => 'Gast',
+    'Invalid or expired join link.' => 'Ungültiger oder abgelaufener Beitritts-Link.',
+    'Public join is not enabled for this session.' => 'Öffentlicher Beitritt ist für diese Videokonferenz nicht aktiviert.',
+    'Public join link: <a href="{link}">{link}</a>' => 'Öffentlicher Beitritts-Link: <a href="{link}">{link}</a>',
+    'Recording updated.' => 'Aufnahme aktualisiert.',
+    'Session created.' => 'Videokonferenz erstellt.',
+    'Session deleted.' => 'Videokonferenz gelöscht.',
+    'Session not found.' => 'Videokonferenz nicht gefunden.',
+    'Session saved.' => 'Videokonferenz gespeichert.',
+    'This session is not running.' => 'Diese Sitzung ist nicht aktiv.',
+    'Video conferencing session' => 'Videokonferenz',
+    'You are not allowed to join this session.' => 'Du hast keine Berechtigung, dieser Sitzung beizutreten.',
+    'You are not allowed to start this session.' => 'Du hast keine Berechtigung, diese Sitzung zu starten.',
+    'You are the moderator of this session. You have additional permissions and responsibilities.' => 'Du bist Moderator*in dieser Sitzung. Du hast erweiterte Berechtigungen und Verantwortlichkeiten.',
+];

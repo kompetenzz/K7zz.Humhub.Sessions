@@ -1,0 +1,41 @@
+<?php
+
+use yii\helpers\Html;
+use humhub\widgets\Button;
+
+/**
+ * @var \humhub\modules\sessions\models\Session $session
+ * @var string $token
+ */
+?>
+
+<div class="container" style="max-width: 500px; margin-top: 50px;">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <i class="fa fa-video-camera"></i>
+                <?= Html::encode($session->title ?: $session->name) ?>
+            </h3>
+        </div>
+        <div class="panel-body">
+            <p><?= Yii::t('SessionsModule.views', 'Enter your name to join as a guest.') ?></p>
+
+            <?= Html::beginForm(['join', 'token' => $token], 'post') ?>
+                <div class="form-group">
+                    <label for="displayName"><?= Yii::t('SessionsModule.views', 'Your Name') ?></label>
+                    <?= Html::textInput('displayName', '', [
+                        'class' => 'form-control',
+                        'id' => 'displayName',
+                        'required' => true,
+                        'autofocus' => true,
+                        'placeholder' => Yii::t('SessionsModule.views', 'Enter your name...')
+                    ]) ?>
+                </div>
+
+                <?= Button::primary(Yii::t('SessionsModule.views', 'Join Session'))
+                    ->icon('sign-in')
+                    ->submit() ?>
+            <?= Html::endForm() ?>
+        </div>
+    </div>
+</div>
