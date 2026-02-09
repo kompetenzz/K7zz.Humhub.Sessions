@@ -2,7 +2,7 @@
     "id": "sessions",
     "name": "Sessions",
     "description": "Multi-backend video conferencing module supporting BigBlueButton, Jitsi, Opentalk, Zoom and may be extended to support even more.",
-    "version": "1.0.0",
+    "version": "0.7.0",
     "homepage": "https://github.com/kompetenzz/K7zz.Humhub.Sessions",
     "humhub": {
         "minVersion": "1.17.0"
