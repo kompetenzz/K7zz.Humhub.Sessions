@@ -10,14 +10,28 @@ use yii\helpers\Html;
 
 <div class="container" style="max-width: 500px; margin-top: 50px;">
     <div class="panel panel-default">
+        <?php if ($session->outputImage): ?>
+            <div>
+                <img src="<?= $session->outputImage->getUrl() ?>"
+                     alt="" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 4px 4px 0 0; display: block;">
+            </div>
+        <?php endif; ?>
+
         <div class="panel-heading">
             <h3 class="panel-title">
                 <i class="fa fa-video-camera"></i>
                 <?= Html::encode($session->title ?: $session->name) ?>
             </h3>
         </div>
-        <div class="panel-body text-center">
-            <div style="padding: 30px 0;">
+        <div class="panel-body">
+            <?php if ($session->description): ?>
+                <p class="text-muted" style="margin-bottom: 15px;">
+                    <?= Html::encode(mb_substr(strip_tags($session->description), 0, 300)) ?>
+                </p>
+                <hr>
+            <?php endif; ?>
+
+            <div class="text-center" style="padding: 20px 0;">
                 <i class="fa fa-clock-o" style="font-size: 48px; color: #999;"></i>
                 <h4><?= Yii::t('SessionsModule.views', 'Waiting for the session to start...') ?></h4>
                 <p class="text-muted">
@@ -25,13 +39,11 @@ use yii\helpers\Html;
                 </p>
             </div>
 
-            <hr>
-
-            <p>
+            <div class="text-center">
                 <a href="<?= \yii\helpers\Url::to(['join', 'token' => $token]) ?>" class="btn btn-default">
                     <i class="fa fa-refresh"></i> <?= Yii::t('SessionsModule.views', 'Check again') ?>
                 </a>
-            </p>
+            </div>
         </div>
     </div>
 </div>

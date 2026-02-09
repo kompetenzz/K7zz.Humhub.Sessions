@@ -175,6 +175,11 @@ class TestBackend implements VideoBackendInterface
         return true;
     }
 
+    public function isAlwaysJoinable(): bool
+    {
+        return false;
+    }
+
     public function getRecordings(Session $session): array
     {
         return [];

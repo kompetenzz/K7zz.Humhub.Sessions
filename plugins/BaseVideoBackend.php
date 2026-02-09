@@ -132,6 +132,14 @@ abstract class BaseVideoBackend extends Component implements VideoBackendInterfa
     }
 
     /**
+     * Default: Backend requires explicit start (e.g. BBB, Zoom, OpenTalk)
+     */
+    public function isAlwaysJoinable(): bool
+    {
+        return false;
+    }
+
+    /**
      * Default: Recordings not supported
      */
     public function getRecordings(Session $session): array

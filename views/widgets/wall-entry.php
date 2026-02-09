@@ -1,13 +1,13 @@
 <?php
 
 use humhub\modules\sessions\assets\SessionAssets;
-use humhub\widgets\Button;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
 /**
  * @var \humhub\modules\sessions\models\Session $session
  * @var \humhub\modules\sessions\interfaces\VideoBackendInterface|null $backend
+ * @var bool $running
  */
 
 SessionAssets::register($this);
@@ -15,55 +15,59 @@ $container = $session->content->container ?? null;
 $urlFunc = $container
     ? fn($route, $params = []) => $container->createUrl($route, $params)
     : fn($route, $params = []) => array_merge([$route], $params);
+
+// Collect feature tags
+$features = [];
+if ($session->has_waitingroom) {
+    $features[] = '<i class="fa fa-clock-o"></i> ' . Yii::t('SessionsModule.views', 'Waiting Room');
+}
+if ($session->allow_recording) {
+    $features[] = '<i class="fa fa-circle text-danger"></i> ' . Yii::t('SessionsModule.views', 'Recording');
+}
+if ($session->mute_on_entry) {
+    $features[] = '<i class="fa fa-microphone-slash"></i> ' . Yii::t('SessionsModule.views', 'Muted on entry');
+}
 ?>
 
-<div class="session-wall-entry">
-    <div class="media">
-        <?php if ($session->outputImage): ?>
-            <div class="media-left">
-                <img src="<?= $session->outputImage->getUrl() ?>"
-                     alt="" class="media-object"
-                     style="width: 80px; height: 60px; object-fit: cover; border-radius: 4px;">
-            </div>
-        <?php endif; ?>
+<div class="session-wall-entry" style="color: #555; line-height: 2;">
+    <?php // Backend line ?>
+    <i class="fa fa-video-camera" style="width: 20px; text-align: center;"></i>
+    <?= $backend ? Html::encode($backend->getName()) : Html::encode($session->backend_type) ?>
 
-        <div class="media-body">
-            <h4 class="media-heading">
-                <i class="fa fa-video-camera"></i>
-                <?= Html::encode($session->title ?: $session->name) ?>
+    <?php // Description line ?>
+    <?php if ($session->description): ?>
+        <br>
+        <i class="fa fa-align-left" style="width: 20px; text-align: center;"></i>
+        <?= Html::encode(mb_substr(strip_tags($session->description), 0, 200)) ?>
+    <?php endif; ?>
 
-                <?php if ($backend): ?>
-                    <small class="text-muted">
-                        <i class="fa <?= $backend->getIcon() ?>"></i>
-                        <?= Html::encode($backend->getName()) ?>
-                    </small>
-                <?php endif; ?>
-            </h4>
+    <?php // Features line ?>
+    <?php if (!empty($features)): ?>
+        <br>
+        <i class="fa fa-cog" style="width: 20px; text-align: center;"></i>
+        <?= implode(' &middot; ', $features) ?>
+    <?php endif; ?>
 
-            <?php if ($session->description): ?>
-                <p><?= Html::encode(mb_substr(strip_tags($session->description), 0, 150)) ?>...</p>
-            <?php endif; ?>
-
-            <div style="margin-top: 10px;">
-                <?php if ($session->canStart()): ?>
-                    <a href="#"
-                       class="btn btn-primary btn-sm session-launch-window"
-                       data-url="<?= Html::encode(Url::to($urlFunc('/sessions/session/start', ['id' => $session->id]), true)) ?>">
-                        <i class="fa fa-play"></i> <?= Yii::t('SessionsModule.views', 'Start / Join') ?>
-                    </a>
-                <?php elseif ($session->canJoin()): ?>
-                    <a href="#"
-                       class="btn btn-success btn-sm session-launch-window"
-                       data-url="<?= Html::encode(Url::to($urlFunc('/sessions/session/join', ['id' => $session->id]), true)) ?>">
-                        <i class="fa fa-sign-in"></i> <?= Yii::t('SessionsModule.views', 'Join') ?>
-                    </a>
-                <?php endif; ?>
-
-                <?= Button::defaultType(Yii::t('SessionsModule.views', 'Details'))
-                    ->link($urlFunc('/sessions/list', ['highlight' => $session->id]))
-                    ->icon('info-circle')
-                    ->sm() ?>
-            </div>
+    <?php // Image ?>
+    <?php if ($session->outputImage): ?>
+        <div style="margin-top: 8px;">
+            <img src="<?= $session->outputImage->getUrl() ?>"
+                 alt="" style="max-width: 300px; max-height: 150px; object-fit: cover; border-radius: 4px;">
         </div>
+    <?php endif; ?>
+
+    <?php // Action buttons ?>
+    <div style="margin-top: 8px;">
+        <?php if ($running && $session->canJoin()): ?>
+            <a href="<?= Html::encode(Url::to($urlFunc('/sessions/session/lobby', ['id' => $session->id]))) ?>"
+               class="btn btn-success btn-sm">
+                <i class="fa fa-sign-in"></i> <?= Yii::t('SessionsModule.views', 'Join') ?>
+            </a>
+        <?php elseif ($session->canStart()): ?>
+            <a href="<?= Html::encode(Url::to($urlFunc('/sessions/session/lobby', ['id' => $session->id]))) ?>"
+               class="btn btn-primary btn-sm">
+                <i class="fa fa-play"></i> <?= Yii::t('SessionsModule.views', 'Start') ?>
+            </a>
+        <?php endif; ?>
     </div>
 </div>

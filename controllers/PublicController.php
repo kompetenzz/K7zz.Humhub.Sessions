@@ -3,6 +3,7 @@
 namespace humhub\modules\sessions\controllers;
 
 use humhub\components\Controller;
+use humhub\modules\sessions\services\BackendRegistry;
 use humhub\modules\sessions\services\SessionService;
 use humhub\modules\sessions\Module;
 use Yii;
@@ -58,8 +59,12 @@ class PublicController extends Controller
             throw new NotFoundHttpException(Yii::t('SessionsModule.base', 'Public join is not enabled for this session.'));
         }
 
-        // Check if meeting is running
-        if (!$this->svc->isRunning($session)) {
+        // Always-joinable backends (e.g. Jitsi) skip the waiting check
+        $backend = BackendRegistry::get($session->backend_type);
+        $alwaysJoinable = $backend && $backend->isAlwaysJoinable();
+
+        // Check if meeting is running (skip for always-joinable backends)
+        if (!$alwaysJoinable && !$this->svc->isRunning($session)) {
             return $this->render('@sessions/views/public/waiting', [
                 'session' => $session,
                 'token' => $token,

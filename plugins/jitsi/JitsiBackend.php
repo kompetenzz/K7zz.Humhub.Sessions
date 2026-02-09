@@ -325,6 +325,15 @@ class JitsiBackend extends BaseVideoBackend
 
     /**
      * @inheritdoc
+     * Jitsi rooms are ephemeral and always available — no explicit start needed.
+     */
+    public function isAlwaysJoinable(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function endMeeting(Session $session): bool
     {

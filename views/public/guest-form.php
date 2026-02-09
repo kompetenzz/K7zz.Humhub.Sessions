@@ -11,6 +11,13 @@ use humhub\widgets\Button;
 
 <div class="container" style="max-width: 500px; margin-top: 50px;">
     <div class="panel panel-default">
+        <?php if ($session->outputImage): ?>
+            <div>
+                <img src="<?= $session->outputImage->getUrl() ?>"
+                     alt="" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 4px 4px 0 0; display: block;">
+            </div>
+        <?php endif; ?>
+
         <div class="panel-heading">
             <h3 class="panel-title">
                 <i class="fa fa-video-camera"></i>
@@ -18,6 +25,13 @@ use humhub\widgets\Button;
             </h3>
         </div>
         <div class="panel-body">
+            <?php if ($session->description): ?>
+                <p class="text-muted" style="margin-bottom: 15px;">
+                    <?= Html::encode(mb_substr(strip_tags($session->description), 0, 300)) ?>
+                </p>
+                <hr>
+            <?php endif; ?>
+
             <p><?= Yii::t('SessionsModule.views', 'Enter your name to join as a guest.') ?></p>
 
             <?= Html::beginForm(['join', 'token' => $token], 'post') ?>

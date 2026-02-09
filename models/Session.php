@@ -14,6 +14,9 @@ use humhub\modules\user\components\User as UserComponent;
 use humhub\modules\user\models\User;
 use humhub\modules\content\widgets\richtext\RichText;
 use humhub\modules\sessions\widgets\WallEntry;
+use humhub\modules\topic\models\Topic;
+use humhub\modules\topic\widgets\TopicLabel;
+use humhub\widgets\Label;
 use humhub\modules\sessions\permissions\{
     Admin,
     StartSession,
@@ -228,6 +231,27 @@ class Session extends ContentActiveRecord
         $attrs['topics'] = implode(' ', $topics);
 
         return $attrs;
+    }
+
+    /**
+     * @inheritdoc
+     * Workaround: HumHub core passes getPolymorphicRelation() (this model) to
+     * TopicLabel::forTopic() which expects a ContentContainerActiveRecord.
+     * We override to pass the correct container.
+     */
+    public function getLabels($result = [], $includeContentName = true)
+    {
+        if ($includeContentName) {
+            $result[] = Label::defaultType($this->getContentName())->icon($this->getIcon())->sortOrder(400);
+        }
+
+        if (class_exists(Topic::class)) {
+            foreach (Topic::findByContent($this->content)->all() as $topic) {
+                $result[] = TopicLabel::forTopic($topic, $this->content->container);
+            }
+        }
+
+        return Label::sort($result);
     }
 
     // ========== Permission Methods ==========

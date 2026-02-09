@@ -172,6 +172,52 @@ class SessionController extends BaseContentController
     }
 
     /**
+     * Lobby page for members — shows session info with contextual Start/Join/Waiting UI.
+     * Intended as the shareable member link (instead of direct start).
+     * @param int|null $id
+     * @return string
+     */
+    public function actionLobby(?int $id = null)
+    {
+        if ($id === null) {
+            throw new NotFoundHttpException();
+        }
+
+        $session = $this->svc->get($id, $this->contentContainer);
+        if (!$session) {
+            throw new NotFoundHttpException(Yii::t('SessionsModule.base', 'Session not found.'));
+        }
+
+        if (!$session->canJoin()) {
+            throw new ForbiddenHttpException(Yii::t('SessionsModule.base', 'You are not allowed to join this session.'));
+        }
+
+        $backend = $this->svc->getBackend($session);
+        $alwaysJoinable = $backend && $backend->isAlwaysJoinable();
+
+        $running = false;
+        if (!$alwaysJoinable) {
+            try {
+                $running = $this->svc->isRunning($session);
+            } catch (\Throwable $e) {
+                // Backend not reachable
+            }
+        }
+
+        $container = $session->content->container ?? null;
+        $urlFunc = $container
+            ? fn($route, $params = []) => $container->createUrl($route, $params)
+            : fn($route, $params = []) => array_merge([$route], $params);
+
+        return $this->render('lobby', [
+            'session' => $session,
+            'running' => $running,
+            'alwaysJoinable' => $alwaysJoinable,
+            'urlFunc' => $urlFunc,
+        ]);
+    }
+
+    /**
      * Exit action (redirect after leaving meeting)
      * @param int|null $highlight
      * @return \yii\web\Response

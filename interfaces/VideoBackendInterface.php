@@ -155,6 +155,14 @@ interface VideoBackendInterface
      */
     public function supportsEmbed(): bool;
 
+    /**
+     * Is the backend always joinable without explicit "start"?
+     * If true, rooms exist on-the-fly (e.g. Jitsi) and the lobby
+     * should redirect directly instead of showing a waiting state.
+     * @return bool
+     */
+    public function isAlwaysJoinable(): bool;
+
     // ========== Recordings (optional) ==========
 
     /**

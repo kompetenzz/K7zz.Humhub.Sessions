@@ -188,8 +188,8 @@ $this->pageTitle = Yii::t('SessionsModule.views', 'Sessions');
                                         return array_merge([$route], $params);
                                     };
 
-                                    // Internal join URL (for members)
-                                    $internalUrl = yii\helpers\Url::to($urlBase('/sessions/session/start', ['id' => $model->id]), true);
+                                    // Internal lobby URL (for members)
+                                    $internalUrl = yii\helpers\Url::to($urlBase('/sessions/session/lobby', ['id' => $model->id]), true);
 
                                     // Public join URL (for guests, if enabled)
                                     $publicUrl = ($model->public_join && $model->public_token)

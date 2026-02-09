@@ -20,9 +20,9 @@ return [
     'Session deleted.' => 'Videokonferenz gelöscht.',
     'Session not found.' => 'Videokonferenz nicht gefunden.',
     'Session saved.' => 'Videokonferenz gespeichert.',
-    'This session is not running.' => 'Diese Sitzung ist nicht aktiv.',
+    'This session is not running.' => 'Diese Session ist nicht aktiv.',
     'Video conferencing session' => 'Videokonferenz',
-    'You are not allowed to join this session.' => 'Du hast keine Berechtigung, dieser Sitzung beizutreten.',
-    'You are not allowed to start this session.' => 'Du hast keine Berechtigung, diese Sitzung zu starten.',
-    'You are the moderator of this session. You have additional permissions and responsibilities.' => 'Du bist Moderator*in dieser Sitzung. Du hast erweiterte Berechtigungen und Verantwortlichkeiten.',
+    'You are not allowed to join this session.' => 'Du hast keine Berechtigung, dieser Session beizutreten.',
+    'You are not allowed to start this session.' => 'Du hast keine Berechtigung, diese Session zu starten.',
+    'You are the moderator of this session. You have additional permissions and responsibilities.' => 'Du bist Moderator*in dieser Session. Du hast erweiterte Berechtigungen und Verantwortlichkeiten.',
 ];
