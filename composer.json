@@ -1,0 +1,13 @@
+{
+    "name": "kompetenzz/humhub-sessions",
+    "description": "HumHub Sessions Module — multi-backend video conferencing",
+    "type": "humhub-module",
+    "license": "AGPL-3.0-or-later",
+    "require": {
+        "php": ">=8.0",
+        "littleredbutton/bigbluebutton-api-php": "^6.1"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
