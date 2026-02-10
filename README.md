@@ -18,6 +18,7 @@ Multi-backend video conferencing module for [HumHub](https://www.humhub.com). In
 | Camera Background | x | | | |
 | Iframe Embed | x | x | | x |
 | Breakout Rooms | x | | x | x |
+| Screen Sharing | x | x | x | x |
 | SIP Dial-in | | | | x |
 
 *OpenTalk recording support depends on server version.
