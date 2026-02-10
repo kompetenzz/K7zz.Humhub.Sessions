@@ -210,6 +210,7 @@ class OpentalkBackend extends BaseVideoBackend
             'description' => $session->description ?? '',
             'password' => $session->public_join ? null : $this->generatePassword(),
             'waiting_room' => (bool) $session->has_waitingroom,
+            'is_time_independent' => true,
             'enable_sip' => false,
         ];
 
