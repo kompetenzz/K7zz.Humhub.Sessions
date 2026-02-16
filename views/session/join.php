@@ -53,7 +53,7 @@ $this->pageTitle = Html::encode($session->title ?: $session->name);
     <i class="fa fa-video-camera"></i>
     <span class="session-title"><?= Html::encode($session->title ?: $session->name) ?></span>
 
-    <a href="<?= $joinUrl ?>" target="_blank" class="btn btn-sm btn-default" title="<?= Yii::t('SessionsModule.views', 'Open in new window') ?>">
+    <a href="<?= $joinUrl ?>" target="_blank" class="btn btn-sm btn-secondary" title="<?= Yii::t('SessionsModule.views', 'Open in new window') ?>">
         <i class="fa fa-external-link"></i>
     </a>
 

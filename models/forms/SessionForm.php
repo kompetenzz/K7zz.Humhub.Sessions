@@ -59,6 +59,11 @@ class SessionForm extends Model
     public ?int $camera_bg_image_file_id = null;
     public $cameraBgImageUpload = null;
 
+    // Remove flags
+    public bool $removeImage = false;
+    public bool $removePresentation = false;
+    public bool $removeCameraBgImage = false;
+
     // Backend config (JSON)
     public array $backendConfig = [];
 
@@ -181,7 +186,7 @@ class SessionForm extends Model
             [['backend_type'], 'string', 'max' => 20],
             [['backend_type'], 'validateBackendAllowed'],
             [['moderator_pw', 'attendee_pw'], 'string', 'max' => 255],
-            [['publicJoin', 'joinByPermissions', 'joinCanStart', 'joinCanModerate', 'moderateByPermissions', 'hasWaitingRoom', 'allowRecording', 'muteOnEntry', 'enabled'], 'boolean'],
+            [['publicJoin', 'joinByPermissions', 'joinCanStart', 'joinCanModerate', 'moderateByPermissions', 'hasWaitingRoom', 'allowRecording', 'muteOnEntry', 'enabled', 'removeImage', 'removePresentation', 'removeCameraBgImage'], 'boolean'],
             [['attendeeRefs', 'moderatorRefs', 'topics', 'backendConfig'], 'safe'],
             [['visibility', 'hidden'], 'integer'],
             [['imageUpload'], 'image', 'extensions' => 'png, jpg, jpeg', 'minWidth' => 200, 'minHeight' => 200, 'skipOnEmpty' => true],
@@ -408,23 +413,45 @@ class SessionForm extends Model
     // ========== File Upload Handling ==========
 
     /**
-     * Save uploaded files
+     * Save uploaded files and handle removals
      */
     private function saveFileUploads(): void
     {
         // Session image
-        if ($this->imageUpload instanceof UploadedFile) {
+        if ($this->removeImage && $this->record->image_file_id > 0) {
+            $this->deleteFileRef('image_file_id');
+        } elseif ($this->imageUpload instanceof UploadedFile) {
             $this->saveSessionImage();
         }
 
         // Presentation (BBB only)
-        if ($this->presentationUpload instanceof UploadedFile) {
+        if ($this->removePresentation && $this->record->presentation_file_id > 0) {
+            $this->deleteFileRef('presentation_file_id');
+            $this->deleteFileRef('presentation_preview_file_id');
+        } elseif ($this->presentationUpload instanceof UploadedFile) {
             $this->savePresentation();
         }
 
         // Camera background image (BBB only)
-        if ($this->cameraBgImageUpload instanceof UploadedFile) {
+        if ($this->removeCameraBgImage && $this->record->camera_bg_image_file_id > 0) {
+            $this->deleteFileRef('camera_bg_image_file_id');
+        } elseif ($this->cameraBgImageUpload instanceof UploadedFile) {
             $this->saveCameraBgImage();
+        }
+    }
+
+    /**
+     * Deletes a file reference from the session and removes the file record.
+     */
+    private function deleteFileRef(string $attribute): void
+    {
+        $fileId = $this->record->$attribute;
+        if ($fileId > 0) {
+            $file = File::findOne($fileId);
+            if ($file) {
+                $file->delete();
+            }
+            $this->record->$attribute = null;
         }
     }
 

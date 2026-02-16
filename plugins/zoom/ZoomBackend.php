@@ -496,20 +496,41 @@ class ZoomBackend extends BaseVideoBackend
             return [];
         }
 
+        // share_url includes the passcode and works without Zoom login
+        $shareUrl = $result['data']['share_url'] ?? null;
+        $password = $result['data']['password'] ?? '';
+
         $recordings = [];
         foreach ($result['data']['recording_files'] as $file) {
-            // Only include video recordings
             if (in_array($file['file_type'] ?? '', ['MP4', 'M4A'])) {
+                // Prefer share_url (no auth needed), fall back to play_url with passcode param
+                $playUrl = $shareUrl;
+                if (!$playUrl) {
+                    $playUrl = $file['play_url'] ?? null;
+                    if ($playUrl && $password) {
+                        $playUrl .= (str_contains($playUrl, '?') ? '&' : '?') . 'pwd=' . urlencode($password);
+                    }
+                }
+
+                $fileType = $file['file_type'] ?? 'MP4';
+                $formatType = match ($fileType) {
+                    'MP4' => 'video',
+                    'M4A' => 'podcast',
+                    default => 'video',
+                };
+
                 $recordings[] = Recording::fromZoomData([
                     'id' => $file['id'],
-                    'play_url' => $file['play_url'] ?? null,
+                    'play_url' => $playUrl,
+                    'share_url' => $shareUrl,
                     'download_url' => $file['download_url'] ?? null,
                     'start_time' => $result['data']['start_time'] ?? null,
                     'duration' => $result['data']['duration'] ?? 0,
                     'topic' => $result['data']['topic'] ?? $session->title,
                     'status' => $file['status'] ?? 'completed',
                     'file_size' => $file['file_size'] ?? 0,
-                    'file_type' => $file['file_type'] ?? 'MP4',
+                    'file_type' => $fileType,
+                    'format_type' => $formatType,
                 ]);
             }
         }

@@ -14,11 +14,11 @@ $this->pageTitle = Yii::t('SessionsModule.config', 'Sessions Settings');
 $availableBackends = $model->getAvailableBackends();
 ?>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
+<div class="card">
+    <div class="card-header">
         <h1><?= Yii::t('SessionsModule.config', 'Sessions Settings') ?></h1>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         <?php $form = ActiveForm::begin(['id' => 'container-settings-form']); ?>
 
         <?= $form->field($model, 'addNavItem')->checkbox() ?>
@@ -36,7 +36,7 @@ $availableBackends = $model->getAvailableBackends();
             <p class="text-muted"><?= $model->attributeHints()['allowedBackends'] ?></p>
 
             <?php foreach ($availableBackends as $backendId => $info): ?>
-                <div class="checkbox">
+                <div class="form-check">
                     <label>
                         <input type="checkbox"
                                name="ContainerSettingsForm[allowedBackends][]"

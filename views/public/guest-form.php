@@ -10,7 +10,7 @@ use humhub\widgets\Button;
 ?>
 
 <div class="container" style="max-width: 500px; margin-top: 50px;">
-    <div class="panel panel-default">
+    <div class="card">
         <?php if ($session->outputImage): ?>
             <div>
                 <img src="<?= $session->outputImage->getUrl() ?>"
@@ -18,13 +18,13 @@ use humhub\widgets\Button;
             </div>
         <?php endif; ?>
 
-        <div class="panel-heading">
-            <h3 class="panel-title">
+        <div class="card-header">
+            <h3 class="card-title">
                 <i class="fa fa-video-camera"></i>
                 <?= Html::encode($session->title ?: $session->name) ?>
             </h3>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <?php if ($session->description): ?>
                 <p class="text-muted" style="margin-bottom: 15px;">
                     <?= Html::encode(mb_substr(strip_tags($session->description), 0, 300)) ?>

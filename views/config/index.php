@@ -15,26 +15,26 @@ use yii\helpers\Html;
 $this->pageTitle = Yii::t('SessionsModule.config', 'Sessions Configuration');
 ?>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
+<div class="card">
+    <div class="card-header">
         <h1><?= Yii::t('SessionsModule.config', 'Sessions Module Settings') ?></h1>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
 
         <!-- Navigation Tabs -->
         <ul class="nav nav-tabs" style="margin-bottom: 20px;">
-            <li class="<?= !$activeBackend ? 'active' : '' ?>">
-                <a href="<?= \yii\helpers\Url::to(['index']) ?>">
+            <li class="nav-item">
+                <a class="nav-link <?= !$activeBackend ? 'active' : '' ?>" href="<?= \yii\helpers\Url::to(['index']) ?>">
                     <i class="fa fa-cog"></i> <?= Yii::t('SessionsModule.config', 'General') ?>
                 </a>
             </li>
             <?php foreach ($backends as $backend): ?>
-                <li class="<?= $activeBackend === $backend->getId() ? 'active' : '' ?>">
-                    <a href="<?= \yii\helpers\Url::to(['index', 'backend' => $backend->getId()]) ?>">
+                <li class="nav-item">
+                    <a class="nav-link <?= $activeBackend === $backend->getId() ? 'active' : '' ?>" href="<?= \yii\helpers\Url::to(['index', 'backend' => $backend->getId()]) ?>">
                         <i class="fa <?= $backend->getIcon() ?>"></i>
                         <?= Html::encode($backend->getName()) ?>
                         <?php if ($backend->isConfigured()): ?>
-                            <span class="label label-success" style="font-size: 9px;">
+                            <span class="badge bg-success" style="font-size: 9px;">
                                 <i class="fa fa-check"></i>
                             </span>
                         <?php endif; ?>
@@ -57,9 +57,9 @@ $this->pageTitle = Yii::t('SessionsModule.config', 'Sessions Configuration');
 
                 <div class="backend-checkboxes" style="margin-bottom: 20px;">
                     <?php foreach ($globalForm->getAvailableBackends() as $backendId => $info): ?>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input"
                                        name="GlobalSettingsForm[allowedBackends][]"
                                        value="<?= Html::encode($backendId) ?>"
                                        <?= in_array($backendId, $globalForm->allowedBackends) ? 'checked' : '' ?>
@@ -97,11 +97,11 @@ $this->pageTitle = Yii::t('SessionsModule.config', 'Sessions Configuration');
                             </td>
                             <td>
                                 <?php if ($backend->isConfigured()): ?>
-                                    <span class="label label-success">
+                                    <span class="badge bg-success">
                                         <i class="fa fa-check"></i> <?= Yii::t('SessionsModule.config', 'Configured') ?>
                                     </span>
                                 <?php else: ?>
-                                    <span class="label label-warning">
+                                    <span class="badge bg-warning">
                                         <i class="fa fa-exclamation-triangle"></i> <?= Yii::t('SessionsModule.config', 'Not configured') ?>
                                     </span>
                                 <?php endif; ?>

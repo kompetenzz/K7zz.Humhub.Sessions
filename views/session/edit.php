@@ -21,11 +21,11 @@ $this->setPageTitle($isNew
     : Yii::t('SessionsModule.views', 'Edit Session'));
 ?>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
+<div class="card">
+    <div class="card-header">
         <h1><?= $this->pageTitle ?></h1>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         <?php $form = ActiveForm::begin([
             'enableClientValidation' => false,
             'options' => ['enctype' => 'multipart/form-data']
@@ -67,12 +67,17 @@ $this->setPageTitle($isNew
 
                 <?php $imageFile = $model->getImageFile(); ?>
                 <?php if ($imageFile !== null): ?>
-                    <label><?= Yii::t('SessionsModule.form', 'Current session image') ?></label>
-                    <div style="margin-bottom: 10px;">
-                        <img src="<?= $imageFile->getUrl() ?>"
-                             class="img-responsive img-thumbnail"
-                             alt="<?= Yii::t('SessionsModule.form', 'Session image') ?>"
-                             style="max-height: 150px; max-width: 100%;">
+                    <div class="mb-3 p-2 border rounded">
+                        <label><?= Yii::t('SessionsModule.form', 'Current session image') ?></label>
+                        <div style="margin-bottom: 10px;">
+                            <img src="<?= $imageFile->getUrl() ?>"
+                                 class="img-fluid img-thumbnail"
+                                 alt="<?= Yii::t('SessionsModule.form', 'Session image') ?>"
+                                 style="max-height: 150px; max-width: 100%;">
+                        </div>
+                        <?= $form->field($model, 'removeImage')->checkbox([
+                            'label' => Yii::t('SessionsModule.form', 'Remove session image'),
+                        ])->label(false) ?>
                     </div>
                 <?php endif; ?>
                 <?= $form->field($model, 'imageUpload')
@@ -152,11 +157,11 @@ $this->setPageTitle($isNew
                                     ?>
 
                                     <?php if ($fieldConfig['type'] === 'checkbox'): ?>
-                                        <div class="form-group">
-                                            <div class="checkbox">
-                                                <label>
+                                        <div class="mb-3">
+                                            <div class="form-check">
+                                                <label class="form-check-label">
                                                     <?= Html::hiddenInput($inputName, '0') ?>
-                                                    <?= Html::checkbox($inputName, (bool) $value, ['id' => $inputId, 'value' => '1']) ?>
+                                                    <?= Html::checkbox($inputName, (bool) $value, ['id' => $inputId, 'value' => '1', 'class' => 'form-check-input']) ?>
                                                     <?= Html::encode($label) ?>
                                                 </label>
                                             </div>
@@ -170,7 +175,7 @@ $this->setPageTitle($isNew
                                             <?= Html::label($label, null, ['class' => 'control-label']) ?>
                                             <?php foreach ($fieldConfig['options'] ?? [] as $optionValue => $optionLabel): ?>
                                                 <?php $desc = $fieldConfig['descriptions'][$optionValue] ?? ''; ?>
-                                                <div class="radio">
+                                                <div class="form-check">
                                                     <label>
                                                         <?= Html::radio($inputName, $value === $optionValue, ['value' => $optionValue]) ?>
                                                         <strong><?= Html::encode($optionLabel) ?></strong>
@@ -253,18 +258,21 @@ $this->setPageTitle($isNew
                     <?php $presentationFile = $model->getPresentationFile(); ?>
                     <?php $presentationPreview = $model->getPresentationPreviewImage(); ?>
                     <?php if ($presentationFile !== null): ?>
-                        <label><?= Yii::t('SessionsModule.form', 'Current presentation') ?></label>
-                        <div style="margin-bottom: 10px;">
+                        <div class="mb-3 p-2 border rounded">
+                            <label><?= Yii::t('SessionsModule.form', 'Current presentation') ?></label>
                             <?php if ($presentationPreview !== null): ?>
                                 <img src="<?= $presentationPreview->getUrl() ?>"
-                                     class="img-responsive img-thumbnail"
+                                     class="img-fluid img-thumbnail"
                                      alt="<?= Yii::t('SessionsModule.form', 'PDF preview') ?>"
-                                     style="max-height: 150px; max-width: 100%;">
+                                     style="max-height: 150px; max-width: 100%; margin-bottom: 10px;">
                             <?php endif; ?>
                             <div class="small text-muted">
                                 <?= Html::encode($presentationFile->file_name) ?>
                                 (<?= round($presentationFile->size / 1024 / 1024, 2) ?> MB)
                             </div>
+                            <?= $form->field($model, 'removePresentation')->checkbox([
+                                'label' => Yii::t('SessionsModule.form', 'Remove presentation'),
+                            ])->label(false) ?>
                         </div>
                     <?php endif; ?>
                     <?= $form->field($model, 'presentationUpload')
@@ -281,12 +289,15 @@ $this->setPageTitle($isNew
                 <div class="form-group">
                     <?php $cameraBgFile = $model->getCameraBgImageFile(); ?>
                     <?php if ($cameraBgFile !== null): ?>
-                        <label><?= Yii::t('SessionsModule.form', 'Current camera background') ?></label>
-                        <div style="margin-bottom: 10px;">
+                        <div class="mb-3 p-2 border rounded">
+                            <label><?= Yii::t('SessionsModule.form', 'Current camera background') ?></label>
                             <img src="<?= $cameraBgFile->getUrl() ?>"
-                                 class="img-responsive img-thumbnail"
+                                 class="img-fluid img-thumbnail"
                                  alt="<?= Yii::t('SessionsModule.form', 'Camera background') ?>"
-                                 style="max-height: 150px; max-width: 100%;">
+                                 style="max-height: 150px; max-width: 100%; margin-bottom: 10px;">
+                            <?= $form->field($model, 'removeCameraBgImage')->checkbox([
+                                'label' => Yii::t('SessionsModule.form', 'Remove camera background'),
+                            ])->label(false) ?>
                         </div>
                     <?php endif; ?>
                     <?= $form->field($model, 'cameraBgImageUpload')

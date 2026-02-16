@@ -18,42 +18,40 @@ SessionAssets::register($this);
 $this->pageTitle = Yii::t('SessionsModule.views', 'Sessions');
 ?>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h1><?= Yii::t('SessionsModule.views', 'Video Sessions') ?></h1>
-    </div>
-    <div class="panel-body">
+<div class="card">
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <h1 class="mb-0"><?= Yii::t('SessionsModule.views', 'Video Sessions') ?></h1>
         <?php if (Yii::$app->user->can('humhub\modules\sessions\permissions\StartSession')): ?>
-            <div class="pull-right">
-                <?= Button::primary(Yii::t('SessionsModule.views', 'Create Session'))
-                    ->link($this->context->contentContainer
-                        ? $this->context->contentContainer->createUrl('/sessions/session/create')
-                        : ['/sessions/session/create'])
-                    ->icon('plus') ?>
-            </div>
+            <?= Button::primary(Yii::t('SessionsModule.views', 'Create Session'))
+                ->link($this->context->contentContainer
+                    ? $this->context->contentContainer->createUrl('/sessions/session/create')
+                    : ['/sessions/session/create'])
+                ->icon('plus') ?>
         <?php endif; ?>
+    </div>
+    <div class="card-body">
 
         <?php if (!empty($isGlobalView)): ?>
-            <div class="btn-group" role="group" style="margin-bottom: 15px;">
+            <div class="btn-group mb-3" role="group">
                 <?= Html::a(
                     '<i class="fa fa-globe"></i> ' . Yii::t('SessionsModule.views', 'Global'),
                     ['/sessions/list', 'scope' => 'global'],
-                    ['class' => 'btn btn-sm ' . ($scope === 'global' ? 'btn-primary' : 'btn-default')]
+                    ['class' => 'btn btn-sm ' . ($scope === 'global' ? 'btn-primary' : 'btn-secondary')]
                 ) ?>
                 <?= Html::a(
                     '<i class="fa fa-users"></i> ' . Yii::t('SessionsModule.views', 'Spaces'),
                     ['/sessions/list', 'scope' => 'spaces'],
-                    ['class' => 'btn btn-sm ' . ($scope === 'spaces' ? 'btn-primary' : 'btn-default')]
+                    ['class' => 'btn btn-sm ' . ($scope === 'spaces' ? 'btn-primary' : 'btn-secondary')]
                 ) ?>
                 <?= Html::a(
                     '<i class="fa fa-user"></i> ' . Yii::t('SessionsModule.views', 'Users'),
                     ['/sessions/list', 'scope' => 'users'],
-                    ['class' => 'btn btn-sm ' . ($scope === 'users' ? 'btn-primary' : 'btn-default')]
+                    ['class' => 'btn btn-sm ' . ($scope === 'users' ? 'btn-primary' : 'btn-secondary')]
                 ) ?>
                 <?= Html::a(
                     '<i class="fa fa-list"></i> ' . Yii::t('SessionsModule.views', 'All'),
                     ['/sessions/list', 'scope' => 'all'],
-                    ['class' => 'btn btn-sm ' . ($scope === 'all' ? 'btn-primary' : 'btn-default')]
+                    ['class' => 'btn btn-sm ' . ($scope === 'all' ? 'btn-primary' : 'btn-secondary')]
                 ) ?>
             </div>
         <?php endif; ?>
@@ -64,22 +62,19 @@ $this->pageTitle = Yii::t('SessionsModule.views', 'Sessions');
                 <p style="margin-top: 15px;"><?= Yii::t('SessionsModule.views', 'No sessions available.') ?></p>
             </div>
         <?php else: ?>
-            <div class="table-responsive" style="margin-top: 15px;">
-                <table class="table table-hover">
-                    <thead>
+            <div class="table-responsive">
+                <table class="table table-hover align-top mb-0" style="--bs-table-cell-padding-x: .75rem; --bs-table-cell-padding-y: .6rem;">
+                    <thead class="table-light">
                         <tr>
-                            <th></th>
+                            <th style="width: 56px;"></th>
                             <th><?= Yii::t('SessionsModule.views', 'Session') ?></th>
                             <?php if (!empty($isGlobalView) && $scope !== 'global'): ?>
                                 <th><?= Yii::t('SessionsModule.views', 'Location') ?></th>
                             <?php endif; ?>
-                            <th><?= Yii::t('SessionsModule.views', 'Backend') ?></th>
-                            <th><?= Yii::t('SessionsModule.views', 'Created') ?></th>
-                            <th style="text-align: center;" title="<?= Yii::t('SessionsModule.views', 'Visibility') ?>"><i class="fa fa-eye"></i></th>
-                            <th style="text-align: center;" title="<?= Yii::t('SessionsModule.views', 'Waiting Room') ?>"><i class="fa fa-clock-o"></i></th>
-                            <th style="text-align: center;" title="<?= Yii::t('SessionsModule.views', 'Recording') ?>"><i class="fa fa-circle"></i></th>
+                            <th style="white-space: nowrap;"><?= Yii::t('SessionsModule.views', 'Backend') ?></th>
                             <th><?= Yii::t('SessionsModule.views', 'Status') ?></th>
-                            <th></th>
+                            <th class="text-center" style="white-space: nowrap;"><?= Yii::t('SessionsModule.views', 'Options') ?></th>
+                            <th class="text-end"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -89,24 +84,27 @@ $this->pageTitle = Yii::t('SessionsModule.views', 'Sessions');
                             $backend = $row['backend'] ?? null;
                             $isHighlighted = $model->id === $highlightId;
                             $sessionContainer = $model->content->container ?? null;
+                            $isPublic = isset($model->content) && $model->content->visibility == \humhub\modules\content\models\Content::VISIBILITY_PUBLIC;
                         ?>
-                            <tr class="<?= $isHighlighted ? 'info' : '' ?>" data-session-id="<?= $model->id ?>">
-                                <td style="padding: 0 !important; vertical-align: middle;">
+                            <tr class="<?= $isHighlighted ? 'table-info' : '' ?>" data-session-id="<?= $model->id ?>">
+                                <td style="padding-left: 1rem;">
                                     <?php if ($model->outputImage): ?>
                                         <img src="<?= $model->outputImage->getUrl() ?>"
-                                             alt="" class="img-rounded"
-                                             style="width: 36px; height: 36px; object-fit: cover; display: block; margin: -1px 0;">
+                                             alt="" class="rounded"
+                                             style="width: 48px; height: 48px; object-fit: cover; display: block;">
                                     <?php else: ?>
-                                        <span class="fa-stack" style="font-size: 18px;">
-                                            <i class="fa fa-square fa-stack-2x text-muted"></i>
-                                            <i class="fa fa-video-camera fa-stack-1x fa-inverse"></i>
+                                        <span style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: #e9ecef; border-radius: 6px;">
+                                            <i class="fa fa-video-camera text-muted" style="font-size: 18px;"></i>
                                         </span>
                                     <?php endif; ?>
                                 </td>
                                 <td>
                                     <strong><?= Html::encode($model->title ?: $model->name) ?></strong>
                                     <?php if ($model->description): ?>
-                                        <br><small class="text-muted"><?= Html::encode(mb_substr(strip_tags($model->description), 0, 80)) ?>...</small>
+                                        <br><small class="text-muted"><?= Html::encode(mb_substr(strip_tags($model->description), 0, 80)) ?></small>
+                                    <?php endif; ?>
+                                    <?php if ($model->created_at && $model->created_at > 86400): ?>
+                                        <br><small class="text-muted"><?= Yii::$app->formatter->asDatetime($model->created_at, 'short') ?></small>
                                     <?php endif; ?>
                                 </td>
                                 <?php if (!empty($isGlobalView) && $scope !== 'global'): ?>
@@ -128,59 +126,38 @@ $this->pageTitle = Yii::t('SessionsModule.views', 'Sessions');
                                         <?php endif; ?>
                                     </td>
                                 <?php endif; ?>
-                                <td>
+                                <td style="white-space: nowrap;">
                                     <?php if ($backend): ?>
-                                        <span title="<?= Html::encode($backend->getName()) ?>" style="display: inline-flex; align-items: center; gap: 6px;">
+                                        <span style="display: inline-flex; align-items: center; gap: 6px;">
                                             <?= $backend->getLogo(18) ?>
                                             <?= Html::encode($backend->getName()) ?>
                                         </span>
                                     <?php else: ?>
-                                        <span class="text-muted"><?= $model->backend_type ?></span>
-                                    <?php endif; ?>
-                                </td>
-                                <td>
-                                    <?php if ($model->created_at): ?>
-                                        <small><?= Yii::$app->formatter->asDatetime($model->created_at, 'short') ?></small>
-                                    <?php endif; ?>
-                                </td>
-                                <td style="text-align: center;">
-                                    <?php
-                                    $isPublic = isset($model->content) && $model->content->visibility == \humhub\modules\content\models\Content::VISIBILITY_PUBLIC;
-                                    ?>
-                                    <i class="fa <?= $isPublic ? 'fa-globe' : 'fa-lock' ?>"
-                                       title="<?= $isPublic
-                                           ? Yii::t('SessionsModule.views', 'Public')
-                                           : Yii::t('SessionsModule.views', 'Private') ?>"
-                                       style="color: <?= $isPublic ? '#5cb85c' : '#999' ?>;"></i>
-                                </td>
-                                <td style="text-align: center;">
-                                    <?php if ($model->has_waitingroom): ?>
-                                        <i class="fa fa-check" title="<?= Yii::t('SessionsModule.views', 'Waiting room enabled') ?>" style="color: #5cb85c;"></i>
-                                    <?php else: ?>
-                                        <span class="text-muted">-</span>
-                                    <?php endif; ?>
-                                </td>
-                                <td style="text-align: center;">
-                                    <?php if ($model->allow_recording): ?>
-                                        <i class="fa fa-circle" title="<?= Yii::t('SessionsModule.views', 'Recording enabled') ?>" style="color: #d9534f;"></i>
-                                    <?php else: ?>
-                                        <span class="text-muted">-</span>
+                                        <span class="text-muted"><?= Html::encode($model->backend_type) ?></span>
                                     <?php endif; ?>
                                 </td>
                                 <td>
                                     <?php if ($running): ?>
-                                        <span class="label label-success">
-                                            <i class="fa fa-circle"></i> <?= Yii::t('SessionsModule.views', 'Running') ?>
-                                        </span>
+                                        <span class="badge bg-success"><i class="fa fa-circle"></i> <?= Yii::t('SessionsModule.views', 'Running') ?></span>
                                     <?php elseif (!$model->enabled): ?>
-                                        <span class="label label-default"><?= Yii::t('SessionsModule.views', 'Disabled') ?></span>
+                                        <span class="badge bg-secondary"><?= Yii::t('SessionsModule.views', 'Disabled') ?></span>
                                     <?php else: ?>
-                                        <span class="label label-default"><?= Yii::t('SessionsModule.views', 'Stopped') ?></span>
+                                        <span class="badge bg-warning text-dark"><?= Yii::t('SessionsModule.views', 'Stopped') ?></span>
                                     <?php endif; ?>
                                 </td>
-                                <td class="text-right">
+                                <td class="text-center" style="white-space: nowrap;">
+                                    <i class="fa <?= $isPublic ? 'fa-globe' : 'fa-lock' ?>"
+                                       title="<?= $isPublic ? Yii::t('SessionsModule.views', 'Public') : Yii::t('SessionsModule.views', 'Private') ?>"
+                                       style="color: <?= $isPublic ? '#5cb85c' : '#999' ?>; margin-right: 4px;"></i>
+                                    <?php if ($model->has_waitingroom): ?>
+                                        <i class="fa fa-clock-o" title="<?= Yii::t('SessionsModule.views', 'Waiting room enabled') ?>" style="color: #5cb85c; margin-right: 4px;"></i>
+                                    <?php endif; ?>
+                                    <?php if ($model->allow_recording): ?>
+                                        <i class="fa fa-circle" title="<?= Yii::t('SessionsModule.views', 'Recording enabled') ?>" style="color: #d9534f;"></i>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="text-end" style="white-space: nowrap;">
                                     <?php
-                                    // Use session's container for URLs (important in global view)
                                     $actionContainer = $sessionContainer ?? $this->context->contentContainer;
                                     $urlBase = $actionContainer ? function($route, $params = []) use ($actionContainer) {
                                         return $actionContainer->createUrl($route, $params);
@@ -188,31 +165,29 @@ $this->pageTitle = Yii::t('SessionsModule.views', 'Sessions');
                                         return array_merge([$route], $params);
                                     };
 
-                                    // Internal lobby URL (for members)
                                     $internalUrl = yii\helpers\Url::to($urlBase('/sessions/session/lobby', ['id' => $model->id]), true);
-
-                                    // Public join URL (for guests, if enabled)
                                     $publicUrl = ($model->public_join && $model->public_token)
                                         ? yii\helpers\Url::to(['/sessions/public/join', 'token' => $model->public_token], true)
                                         : null;
                                     ?>
 
-                                    <?php // Copy buttons for admins ?>
                                     <?php if ($model->canAdminister()): ?>
-                                        <button type="button"
-                                                class="btn btn-default btn-sm copy-url-btn"
-                                                data-url="<?= Html::encode($internalUrl) ?>"
-                                                title="<?= Yii::t('SessionsModule.views', 'Copy member link') ?>">
-                                            <i class="fa fa-link"></i>
-                                        </button>
-                                        <?php if ($publicUrl): ?>
+                                        <div class="btn-group btn-group-sm me-1">
                                             <button type="button"
-                                                    class="btn btn-info btn-sm copy-url-btn"
-                                                    data-url="<?= Html::encode($publicUrl) ?>"
-                                                    title="<?= Yii::t('SessionsModule.views', 'Copy public/guest link') ?>">
-                                                <i class="fa fa-globe"></i>
+                                                    class="btn btn-outline-secondary copy-url-btn"
+                                                    data-url="<?= Html::encode($internalUrl) ?>"
+                                                    title="<?= Yii::t('SessionsModule.views', 'Copy member link') ?>">
+                                                <i class="fa fa-link"></i>
                                             </button>
-                                        <?php endif; ?>
+                                            <?php if ($publicUrl): ?>
+                                                <button type="button"
+                                                        class="btn btn-outline-info copy-url-btn"
+                                                        data-url="<?= Html::encode($publicUrl) ?>"
+                                                        title="<?= Yii::t('SessionsModule.views', 'Copy public/guest link') ?>">
+                                                    <i class="fa fa-globe"></i>
+                                                </button>
+                                            <?php endif; ?>
+                                        </div>
                                     <?php endif; ?>
 
                                     <?php if ($running && $model->canJoin()): ?>
@@ -228,6 +203,14 @@ $this->pageTitle = Yii::t('SessionsModule.views', 'Sessions');
                                            data-url="<?= Html::encode(yii\helpers\Url::to($urlBase('/sessions/session/start', ['id' => $model->id]), true)) ?>"
                                            title="<?= Yii::t('SessionsModule.views', 'Start') ?>">
                                             <i class="fa fa-play"></i> <?= Yii::t('SessionsModule.views', 'Start') ?>
+                                        </a>
+                                    <?php endif; ?>
+
+                                    <?php if ($model->allow_recording): ?>
+                                        <a href="<?= yii\helpers\Url::to($urlBase('/sessions/session/recordings', ['id' => $model->id])) ?>"
+                                           class="btn btn-outline-secondary btn-sm"
+                                           title="<?= Yii::t('SessionsModule.views', 'Recordings') ?>">
+                                            <i class="fa fa-film"></i>
                                         </a>
                                     <?php endif; ?>
 
@@ -250,36 +233,23 @@ $this->pageTitle = Yii::t('SessionsModule.views', 'Sessions');
 
 <?php
 $copiedText = Yii::t('SessionsModule.views', 'Copied!');
-$copyFailedText = Yii::t('SessionsModule.views', 'Copy failed');
 $js = <<<JS
 $(document).on('click', '.copy-url-btn', function() {
     var btn = $(this);
     var url = btn.data('url');
-    var originalTitle = btn.attr('title');
+    var originalHtml = btn.html();
 
     navigator.clipboard.writeText(url).then(function() {
-        // Success feedback
-        btn.find('i').removeClass('fa-link').addClass('fa-check');
-        btn.attr('title', '{$copiedText}');
-        btn.tooltip('show');
-
-        setTimeout(function() {
-            btn.find('i').removeClass('fa-check').addClass('fa-link');
-            btn.attr('title', originalTitle);
-            btn.tooltip('hide');
-        }, 1500);
+        btn.html('<i class="fa fa-check"></i>');
+        setTimeout(function() { btn.html(originalHtml); }, 1500);
     }).catch(function() {
-        // Fallback for older browsers
         var temp = $('<input>');
         $('body').append(temp);
         temp.val(url).select();
         document.execCommand('copy');
         temp.remove();
-
-        btn.find('i').removeClass('fa-link').addClass('fa-check');
-        setTimeout(function() {
-            btn.find('i').removeClass('fa-check').addClass('fa-link');
-        }, 1500);
+        btn.html('<i class="fa fa-check"></i>');
+        setTimeout(function() { btn.html(originalHtml); }, 1500);
     });
 });
 JS;

@@ -16,7 +16,7 @@ $this->pageTitle = Html::encode($session->title ?: $session->name);
 ?>
 
 <div class="container" style="max-width: 500px; margin-top: 30px;">
-    <div class="panel panel-default">
+    <div class="card">
         <?php if ($session->outputImage): ?>
             <div>
                 <img src="<?= $session->outputImage->getUrl() ?>"
@@ -24,13 +24,13 @@ $this->pageTitle = Html::encode($session->title ?: $session->name);
             </div>
         <?php endif; ?>
 
-        <div class="panel-heading">
-            <h3 class="panel-title">
+        <div class="card-header">
+            <h3 class="card-title">
                 <i class="fa fa-video-camera"></i>
                 <?= Html::encode($session->title ?: $session->name) ?>
             </h3>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <?php if ($session->description): ?>
                 <p class="text-muted" style="margin-bottom: 15px;">
                     <?= Html::encode(mb_substr(strip_tags($session->description), 0, 300)) ?>
@@ -50,7 +50,7 @@ $this->pageTitle = Html::encode($session->title ?: $session->name);
 
             <?php elseif ($running && $session->canJoin()): ?>
                 <div class="text-center" style="padding: 10px 0;">
-                    <span class="label label-success" style="font-size: 14px; padding: 5px 12px;">
+                    <span class="badge bg-success" style="font-size: 14px; padding: 5px 12px;">
                         <i class="fa fa-circle"></i> <?= Yii::t('SessionsModule.views', 'Running') ?>
                     </span>
                 </div>
@@ -64,7 +64,7 @@ $this->pageTitle = Html::encode($session->title ?: $session->name);
 
             <?php elseif ($session->canStart()): ?>
                 <div class="text-center" style="padding: 10px 0;">
-                    <span class="label label-default" style="font-size: 14px; padding: 5px 12px;">
+                    <span class="badge bg-secondary" style="font-size: 14px; padding: 5px 12px;">
                         <?= Yii::t('SessionsModule.views', 'Not started yet') ?>
                     </span>
                 </div>
@@ -85,7 +85,7 @@ $this->pageTitle = Html::encode($session->title ?: $session->name);
                     </p>
                 </div>
                 <div class="text-center">
-                    <a href="<?= Url::to($urlFunc('/sessions/session/lobby', ['id' => $session->id])) ?>" class="btn btn-default">
+                    <a href="<?= Url::to($urlFunc('/sessions/session/lobby', ['id' => $session->id])) ?>" class="btn btn-secondary">
                         <i class="fa fa-refresh"></i> <?= Yii::t('SessionsModule.views', 'Check again') ?>
                     </a>
                 </div>
@@ -94,5 +94,14 @@ $this->pageTitle = Html::encode($session->title ?: $session->name);
                 </script>
             <?php endif; ?>
         </div>
+
+        <?php if ($session->allow_recording): ?>
+            <div class="card-footer text-center">
+                <a href="<?= Url::to($urlFunc('/sessions/session/recordings', ['id' => $session->id])) ?>"
+                   class="btn btn-outline-secondary btn-sm">
+                    <i class="fa fa-film"></i> <?= Yii::t('SessionsModule.views', 'Recordings') ?>
+                </a>
+            </div>
+        <?php endif; ?>
     </div>
 </div>

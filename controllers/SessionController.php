@@ -3,6 +3,7 @@
 namespace humhub\modules\sessions\controllers;
 
 use humhub\modules\sessions\models\forms\SessionForm;
+use humhub\modules\sessions\models\SessionEventLog;
 use Yii;
 use yii\helpers\Url;
 use yii\web\{ForbiddenHttpException, NotFoundHttpException};
@@ -104,6 +105,7 @@ class SessionController extends BaseContentController
                 $this->view->error(Yii::t('SessionsModule.base', 'Failed to start session.'));
                 return $this->redirect($this->getUrl('/sessions/list'));
             }
+            SessionEventLog::log($session->id, SessionEventLog::EVENT_STARTED, Yii::$app->user->id);
         }
 
         // Get join URL
@@ -114,6 +116,8 @@ class SessionController extends BaseContentController
             $this->view->error(Yii::t('SessionsModule.base', 'Failed to get join URL.'));
             return $this->redirect($this->getUrl('/sessions/list'));
         }
+
+        SessionEventLog::log($session->id, SessionEventLog::EVENT_JOINED, Yii::$app->user->id);
 
         $backend = $this->svc->getBackend($session);
         if ($embed && $backend && $backend->supportsEmbed()) {
@@ -159,6 +163,8 @@ class SessionController extends BaseContentController
             $this->view->error(Yii::t('SessionsModule.base', 'Failed to get join URL.'));
             return $this->redirect($this->getUrl('/sessions/list'));
         }
+
+        SessionEventLog::log($session->id, SessionEventLog::EVENT_JOINED, Yii::$app->user->id);
 
         $backend = $this->svc->getBackend($session);
         if ($embed && $backend && $backend->supportsEmbed()) {
@@ -219,12 +225,46 @@ class SessionController extends BaseContentController
 
     /**
      * Exit action (redirect after leaving meeting)
+     * @param int|null $id Session ID for logging
      * @param int|null $highlight
      * @return \yii\web\Response
      */
-    public function actionExit(?int $highlight = null)
+    public function actionExit(?int $id = null, ?int $highlight = null)
     {
+        if ($id !== null) {
+            SessionEventLog::log($id, SessionEventLog::EVENT_LEFT, Yii::$app->user->id);
+        }
         return $this->redirect([$this->getUrl('/sessions/list'), 'highlight' => $highlight]);
+    }
+
+    /**
+     * Stops a running session
+     * @param int|null $id
+     * @return \yii\web\Response
+     */
+    public function actionStop(?int $id = null)
+    {
+        if ($id === null) {
+            throw new NotFoundHttpException();
+        }
+
+        $session = $this->svc->get($id, $this->contentContainer);
+        if (!$session) {
+            throw new NotFoundHttpException(Yii::t('SessionsModule.base', 'Session not found.'));
+        }
+
+        if (!$session->canStart()) {
+            throw new ForbiddenHttpException(Yii::t('SessionsModule.base', 'You are not allowed to stop this session.'));
+        }
+
+        if ($this->svc->end($session)) {
+            SessionEventLog::log($session->id, SessionEventLog::EVENT_STOPPED, Yii::$app->user->id);
+            $this->view->success(Yii::t('SessionsModule.base', 'Session stopped.'));
+        } else {
+            $this->view->error(Yii::t('SessionsModule.base', 'Failed to stop session.'));
+        }
+
+        return $this->redirect($this->getUrl('/sessions/list'));
     }
 
     /**
@@ -257,7 +297,8 @@ class SessionController extends BaseContentController
     }
 
     /**
-     * Get recordings for a session
+     * Get recordings for a session.
+     * Admins see all recordings, members only published ones.
      * @param int|null $id
      * @return string
      */
@@ -272,15 +313,22 @@ class SessionController extends BaseContentController
             throw new NotFoundHttpException(Yii::t('SessionsModule.base', 'Session not found.'));
         }
 
-        if (!$session->canAdminister()) {
+        if (!$session->canJoin()) {
             throw new ForbiddenHttpException();
         }
 
+        $isAdmin = $session->canAdminister();
         $recordings = $this->svc->getRecordings($session);
+
+        // Non-admins only see published recordings
+        if (!$isAdmin) {
+            $recordings = array_filter($recordings, fn($r) => $r->isPublished());
+        }
 
         return $this->render('recordings', [
             'session' => $session,
             'recordings' => $recordings,
+            'canAdminister' => $isAdmin,
         ]);
     }
 

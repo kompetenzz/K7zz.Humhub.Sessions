@@ -36,7 +36,7 @@ class Events
     private static function addNavItem(
         $menu,
         $label,
-        ContentContainerActiveRecord $container = null,
+        ?ContentContainerActiveRecord $container = null,
         int $order = 0
     ): void {
         $url = $container ? $container->createUrl('/sessions/list') : '/sessions/list';
